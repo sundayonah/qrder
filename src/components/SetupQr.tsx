@@ -8,20 +8,24 @@ const TABLES = Array.from({ length: 12 }, (_, i) => String(i + 1));
 export function TableQrGrid({
   appUrl,
   compact = false,
+  guest = false,
 }: {
   appUrl: string;
   compact?: boolean;
+  guest?: boolean;
 }) {
   const origin = appUrl.replace(/\/$/, "");
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-neutral-600">
-        Scan these on a phone. They use{" "}
-        <span className="break-all font-medium text-black">
-          {origin || "Set APP_URL in .env"}
-        </span>
-      </p>
+      {!guest && (
+        <p className="text-sm text-neutral-600">
+          Scan these on a phone. They use{" "}
+          <span className="break-all font-medium text-black">
+            {origin || "Set APP_URL in .env"}
+          </span>
+        </p>
+      )}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {TABLES.map((tableId) => {
           const url = origin
@@ -43,9 +47,11 @@ export function TableQrGrid({
               ) : (
                 <div className="h-28 w-28 bg-neutral-100" />
               )}
-              <p className="break-all text-center text-[10px] text-neutral-500">
-                {url}
-              </p>
+              {!guest && (
+                <p className="break-all text-center text-[10px] text-neutral-500">
+                  {url}
+                </p>
+              )}
             </div>
           );
         })}
