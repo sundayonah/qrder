@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Qrder
 
-## Getting Started
+Scan a table QR → order (menu or plain language with open AI) → kitchen phone buzzes. Built for a friend’s restaurant.
 
-First, run the development server:
+## Stack
+
+- Next.js + TypeScript + Tailwind
+- MongoDB Atlas (optional locally — in-memory fallback)
+- Open-model order parsing via Groq-compatible API (heuristic fallback)
+- Deploy: Vercel
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+cd qrder
+pnpm install
+cp .env.example .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- http://localhost:3000 — home
+- http://localhost:3000/setup — print table QR codes
+- http://localhost:3000/t/1 — guest table
+- http://localhost:3000/kitchen — staff board (tap **Enable buzz + sound**)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Demo flow
 
-## Learn More
+1. Open `/kitchen` on your friend’s phone → enable buzz
+2. Open `/t/3` (or scan a QR from `/setup`)
+3. Order from the menu **or** type “jollof for 2 and zobo” → **Understand with AI** → send
+4. Tap **Call staff** — kitchen should buzz / beep with table number
 
-To learn more about Next.js, take a look at the following resources:
+## MongoDB
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Set `MONGODB_URI` in `.env.local` (Atlas connection string). Without it, orders live in memory (fine for local demo; resets on server restart).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## AI
 
-## Deploy on Vercel
+Set `AI_API_KEY` (or `GROQ_API_KEY`) for open-model parsing. Without a key, a local keyword matcher still maps common dish names.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Design
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+White background, black buttons, `cursor-pointer` on controls.
